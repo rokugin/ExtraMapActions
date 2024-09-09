@@ -104,7 +104,7 @@ namespace ExtraMapActions {
             if (answer.ToLower() == "cancel") return;
 
             if (long.TryParse(answer.Split('_')[0], out var id)) {
-                Farmer farmhand = Game1.getFarmerMaybeOffline(id);
+                Farmer? farmhand = Game1.GetPlayer(id);
                 if (farmhand != null && Utility.getHomeOfFarmer(farmhand) is Cabin home && !farmhand.isActive()) {
                     home.inventoryMutex.RequestLock(home.openFarmhandInventory);
                 }
