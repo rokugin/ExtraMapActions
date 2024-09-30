@@ -1,0 +1,5 @@
+{
+  "AlwaysOn": {
+    "Condition": "true"
+  }
+}
