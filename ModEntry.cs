@@ -24,11 +24,52 @@ internal class ModEntry : Mod {
         helper.Events.Player.Warped += OnWarped;
         helper.Events.Multiplayer.ModMessageReceived += OnModMessageReceived;
         helper.Events.GameLoop.DayEnding += OnDayEnding;
+        helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
         helper.Events.Content.AssetReady += static (_, e) => AssetManager.OnAssetReady(e);
         helper.Events.GameLoop.SaveLoaded += static (_, e) => AssetManager.OnSaveLoaded(e);
 
         TileActions.Init(Monitor, helper, Config, logLevel);
+    }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) {
+        GameLocation location = Game1.currentLocation;
+        string[] values = location.GetMapPropertySplitBySpaces("EMA_FireplaceLocation");
+        if (values.Length < 3) return;
+
+        Point point = new();
+
+        if (!location.modData.TryGetValue("rokugin.EMA", out string value)) {
+            return;
+        }
+
+        for (int i = 0; i < values.Length; i += 3) {
+            if (!int.TryParse(values[i], out point.X)) {
+                Monitor.Log("\nTile X is not valid. Must be an integer.", LogLevel.Error);
+                return;
+            }
+            if (!int.TryParse(values[i + 1], out point.Y)) {
+                Monitor.Log("\nTile Y is not valid. Must be an integer.", LogLevel.Error);
+                return;
+            }
+            if (!GameStateQuery.CheckConditions(FireplaceConditionsData[values[i + 2]].Condition, location, Game1.player)) {
+                Monitor.Log("\nConditions not met.", logLevel);
+                location.setFireplace(on: false, point.X, point.Y, false);
+                return;
+            }
+
+            location.setFireplace(on: true, point.X, point.Y, false);
+        }
+
+        foreach (string key in location.modData.Keys) {
+            if (!key.StartsWith("EMA_Fireplace")) continue;
+
+            string[] keySplit = key.Split("_");
+            int.TryParse(keySplit[2], out int X);
+            int.TryParse(keySplit[3], out int Y);
+
+            location.setFireplace(on: location.modData[key] == "on" ? true : false, X, Y, false);
+        }
     }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e) {

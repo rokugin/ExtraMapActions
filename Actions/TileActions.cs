@@ -80,7 +80,7 @@ public class TileActions {
 
             choices.Add(new Response(key, name));
         }
-
+        
         Monitor.Log($"{choices.Count} farmhand inventories found.", logLevel);
         choices.Add(new Response("Cancel", Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_TransferCancel")));
         Monitor.Log("Attempting to open prompt.", logLevel);
