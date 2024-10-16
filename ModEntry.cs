@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using xTile.Dimensions;
 
 namespace ExtraMapActions;
 
 internal class ModEntry : Mod {
 
     ModConfig Config = new();
+    TileActions TileActions = new();
     LogLevel logLevel => Config.DebugLogging ? LogLevel.Debug : LogLevel.Trace;
     public static string ModId = null!;
     internal static Dictionary<string, FireplaceConditionsModel> FireplaceConditionsData = new();
