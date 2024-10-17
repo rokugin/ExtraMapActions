@@ -8,9 +8,22 @@
   * [Tiled](#tiled)
 * [Extras](#extras)
   * [Crane Game Prizes](#craneprizes)
+  * [Fireplaces](#fireplaces)
 
 ## Introduction<span id="introduction"></span>
-Extra Map Actions listens for player interaction with tiles with specific TileData properties, in order to allow for more places that can open the crane game, lost and found, and offline farmhand inventories.
+Extra Map Actions adds new tile actions and map properties.<br>
+| Tile Action | Description |
+| :--- | :--- |
+| EMA_CraneGame | Opens the crane game dialogue |
+| EMA_LostAndFound | Opens [lost and found](https://stardewvalleywiki.com/Mayor%27s_Manor#Lost_and_Found) |
+| EMA_OfflineFarmhandInventory | Opens dialogue window to choose an offline farmhand inventory to open |
+| EMA_Fireplace \[right] | Can be used to create an operable fireplace |
+| EMA_DivorceBook | Opens [divorce book](https://stardewvalleywiki.com/Mayor%27s_Manor#Divorce) |
+| EMA_LedgerBook | Opens [ledger book](https://stardewvalleywiki.com/Multiplayer#Money) |
+
+| Map Property | Description |
+| :--- | :--- |
+| EMA_FireplaceLocation \[\<intX> \<intY> \<FireplaceCondition>] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
 
 The config contains two settings, `Debug Logging` and `Crane Game Cost`. Debug Logging will post logs to the console window as you interact with tiles that have the appropriate TileData, it's not that useful.<br>
 Crane Game Cost must be a positive value or zero.<br>
@@ -49,7 +62,7 @@ With those in place, I used CP to add my custom properties to the bus stop map.
           },
           "Layer": "Buildings",
           "SetProperties": {
-            "Action": "ema_offlinefarmhandinventory"
+            "Action": "EMA_OfflineFarmhandInventory"
           }
         }
       ]
@@ -57,7 +70,7 @@ With those in place, I used CP to add my custom properties to the bus stop map.
   ]
 }
 ```
-The property value is case-insensitive.
+The property value is case-sensitive.
 
 ### Tiled<span id="tiled"></span>
 In order to add the property to your map in Tiled, select the Buildings object layer<br>
@@ -100,6 +113,7 @@ Note: the action value is case-insensitive.
 Crane game prizes are mostly hardcoded, however you can use `Data/Movies` to add to or completely overwrite the prize lists.<br>
 More detailed information can be found on the [migration page of the wiki](https://stardewvalleywiki.com/Modding:Migrate_to_Stardew_Valley_1.6#Custom_movies), but I have some examples and notes I will make here.
 
+#### Example 1
 The first example is for completely overwriting the prize lists so that only your chosen prizes are available:
 ```json
 {
@@ -149,8 +163,7 @@ The `When` and `Update` fields are included to make the changes only happen when
 
 These prize lists are specific to what movie should be playing, even if you haven't unlocked the theater yet, so in order to have prize lists that are the same you have to make changes to the `CranePrizes` for every movie, alternatively this means you can easily have seasonal and alternating yearly different prize lists.
 
----
-
+#### Example 2
 The next example is for if you only want to add prizes without modifying the existing lists:
 ```json
 {
@@ -192,8 +205,7 @@ This time, in order to avoid overwriting the movie specific prizes, we use `Targ
 
 The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.
 
----
-
+#### Example 3
 Because we're targeting `CranePrizes` like this, we can't also edit `ClearDefaultCranePrizeGroups` in one patch, so if we want to any of the default prize groups, we have to make a separate patch:
 ```json
 {
@@ -222,3 +234,51 @@ Notes:<br>
 This is obviously optional if you don't want to clear default prize groups and the same rules as earlier apply if you do, any groups you clear have to have an entry in the previous patch to add a new entry, empty groups will cause errors.
 
 The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.
+
+---
+
+### Fireplaces<span id="fireplaces"></span>
+Fireplace tile actions can be added directly to Tiled:<br>
+
+
+
+Or they can be added through CP:<br>
+```jsonc
+{
+  "Changes": [
+    {
+      "Action": "EditMap",
+      "Target": "Maps/<TargetMapGoesHere>",
+      "MapTiles": [
+        {
+          "Position": {// tile position of the left tile of the fireplace
+            "X": 0,
+            "Y": 0
+          },
+          "Layer": "Buildings",
+          "SetProperties": {
+            "Action": "EMA_Fireplace"
+          }
+        },
+        {
+          "Position": {// tile position of the right tile of the fireplace
+            "X": 1,
+            "Y": 0
+          },
+          "Layer": "Buildings",
+          "SetProperties": {
+            "Action": "EMA_Fireplace right"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+
+Additionally, this mod introduces a new map property `EMA_FireplaceLocation` that combines with a new CP asset.<br>
+`rokugin.EMA/FireplaceConditions` is a <string, model> dictionary that can be edited through CP.<br>
+```jsonc
+
+```
