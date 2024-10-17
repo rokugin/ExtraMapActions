@@ -239,7 +239,8 @@ The `When` and `Update` fields are included to make the changes only happen when
 
 ### Fireplaces<span id="fireplaces"></span>
 Fireplace tile actions can be added directly to Tiled:<br>
-
+![Screenshot of properties window with fireplace left action filled out.](screenshots/fireplace-left-tiled.png)<br>
+![Screenshot of properties window with fireplace right action filled out.](screenshots/fireplace-right-tiled.png)
 
 
 Or they can be added through CP:<br>
