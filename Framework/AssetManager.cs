@@ -8,7 +8,7 @@ internal static class AssetManager {
 
     internal static void OnAssetRequested(AssetRequestedEventArgs e) {
         if (e.NameWithoutLocale.IsEquivalentTo("rokugin.EMA/FireplaceConditions")) {
-            e.LoadFromModFile<Dictionary<string, FireplaceConditionsModel>>("assets/default-data.json", AssetLoadPriority.Medium);
+            e.LoadFromModFile<Dictionary<string, FireplaceConditionsModel>>("assets/DefaultFireplaceConditions.json", AssetLoadPriority.Medium);
         }
     }
 
