@@ -278,8 +278,22 @@ Or they can be added through CP:<br>
 ```
 
 
-Additionally, this mod introduces a new map property `EMA_FireplaceLocation` that combines with a new CP asset.<br>
-`rokugin.EMA/FireplaceConditions` is a <string, model> dictionary that can be edited through CP.<br>
-```jsonc
+Additionally, this mod introduces a new map property `EMA_FireplaceLocation` that combines with a new CP dictionary asset<br>
+`rokugin.EMA/FireplaceConditions`.<br>
 
+The map property can be set in Tiled:<br>
+![Screenshot of map properties window with fireplace location property filled out and highlighted.](screenshots/fireplacelocation-map-property.png)
+
+
+
+```jsonc
+{
+  "Action": "EditData",
+  "Target": "rokugin.EMA/FireplaceConditions",
+  "Entries": {
+    "rokugin_custom1": {
+      "Condition": "ANY \"SEASON fall winter\" \"WEATHER Here Rain Snow Storm GreenRain\""
+    }
+  }
+}
 ```
