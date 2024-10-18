@@ -24,7 +24,7 @@ Extra Map Actions adds new tile actions and map properties.<br>
 
 | Map Property | Description |
 | :--- | :--- |
-| EMA_FireplaceLocation \[\<intX> \<intY> \<FireplaceCondition>] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
+| EMA_FireplaceLocation \[\<X> \<Y> \<fireplaceConditionsKey>] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
 
 The config contains two settings, `Debug Logging` and `Crane Game Cost`. Debug Logging will post logs to the console window as you interact with tiles that have the appropriate TileData, it's not that useful.<br>
 Crane Game Cost must be a positive value or zero.<br>
@@ -221,6 +221,9 @@ This is obviously optional if you don't want to clear default prize groups and t
 The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.<br><br>
 
 ### Fireplaces<span id="fireplaces"></span>
+#### EMA_Fireplace
+A tile action that starts or stops a fireplace. `EMA_Fireplace` should be placed on the left tile of the fireplace and `EMA_Fireplace right` should be placed on the right tile.<br>
+
 Fireplace tile actions can be added directly to Tiled:<br>
 ![Screenshot of properties window with fireplace left action filled out.](screenshots/fireplace-left-tiled.png)<br>
 ![Screenshot of properties window with fireplace right action filled out.](screenshots/fireplace-right-tiled.png)
@@ -257,14 +260,16 @@ Or they can be added through CP:<br>
 ```
 <br>
 
-#### Fireplace Location Map Property
-Additionally, this mod introduces a new map property `EMA_FireplaceLocation` that combines with a new CP dictionary asset<br>
-`rokugin.EMA/FireplaceConditions`.<br>
+#### EMA_FireplaceLocation
+A map property that combines with a new CP dictionary asset `rokugin.EMA/FireplaceConditions` to set up conditionally active fireplaces.<br>
 
-The format of Fireplace Location is `EMA_FireplaceLocation [<intX> <intY> <fireplaceConditionsKey>] +` (the + indicates that you can create multiple entries following the same format, separated by a space).<br>
+The format of Fireplace Location is:<br>
+`EMA_FireplaceLocation [<intX> <intY> <fireplaceConditionsKey>] +`<br>
+The `+` indicates that you can create multiple entries, separated by a space. Check the example below.<br>
 
-&nbsp;&nbsp;`<intX> <intY>` is the tile coordinates of the left tile of the fireplace.<br>
-&nbsp;&nbsp;`<fireplaceConditionsKey>` is the entry key of the condition you want to check to determine if the fireplace should turn on (AlwaysOn is the default provided key for the asset).<br>
+`<intX> <intY>` is the tile coordinates of the left tile of the fireplace.<br>
+`<fireplaceConditionsKey>` is the entry key of the condition you want to check to determine if the fireplace should turn on.<br>
+AlwaysOn is the default key in the asset.<br>
 
 Make sure to remove all the `<>`.<br>
 
@@ -288,14 +293,20 @@ Or with CP:<br>
 <br>
 
 #### Fireplace Conditions Data Asset
+A dictionary of string → models containing a Condition field that accepts a [Game State Query](https://stardewvalleywiki.com/Modding:Game_state_queries).<br>
+
+Existing entries can be edited or new entries can be added using CP's [EditData](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editdata.md):<br>
 ```jsonc
 {
   "Action": "EditData",
   "Target": "rokugin.EMA/FireplaceConditions",
   "Entries": {
-    "rokugin_custom1": {
+    "rokugin_custom1": {// adds new entry
       "Condition": "ANY \"SEASON fall winter\" \"WEATHER Here Rain Snow Storm GreenRain\""
-    }
+    },
+    "AlwaysOn": {// overwrites existing AlwaysOn entry
+      "Condition": "false"
+    },
   }
 }
 ```
