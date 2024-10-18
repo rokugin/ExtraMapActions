@@ -261,7 +261,12 @@ Or they can be added through CP:<br>
 Additionally, this mod introduces a new map property `EMA_FireplaceLocation` that combines with a new CP dictionary asset<br>
 `rokugin.EMA/FireplaceConditions`.<br>
 
-The format of Fireplace Location is `EMA_FireplaceLocation [<intX> <intY> <fireplaceConditionsKey>] +` (the + indicates that you can create multiple entries following the same format, separated by a space).
+The format of Fireplace Location is `EMA_FireplaceLocation [<intX> <intY> <fireplaceConditionsKey>] +` (the + indicates that you can create multiple entries following the same format, separated by a space).<br>
+
+&nbsp;&nbsp;`<intX> <intY>` is the tile coordinates of the left tile of the fireplace.<br>
+&nbsp;&nbsp;`<fireplaceConditionsKey>` is the entry key of the condition you want to check to determine if the fireplace should turn on (AlwaysOn is the default provided key for the asset).<br>
+
+Make sure to remove all the `<>`.<br>
 
 The map property can be set in Tiled:<br>
 ![Screenshot of map properties window with fireplace location property filled out and highlighted.](screenshots/fireplacelocation-map-property.png)<br>
