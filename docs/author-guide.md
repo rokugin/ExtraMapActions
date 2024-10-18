@@ -104,7 +104,7 @@ Now in our properties window, we'll put the action we're trying to invoke<br>
 ![Screenshot of properties window with action filled out.](screenshots/properties-window-action.png)
 
 
-Note: the action value is case-insensitive.
+Note: the action value is case-sensitive.
 ## Extras<span id="extras"></span>
 ### Crane Game Prizes<span id="craneprizes"></span>
 Crane game prizes are mostly hardcoded, however you can use `Data/Movies` to add to or completely overwrite the prize lists.<br>
