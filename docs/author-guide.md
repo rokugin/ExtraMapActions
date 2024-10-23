@@ -1,4 +1,4 @@
-# Extra Map Actions
+# Extra Map Actions (EMA)
 
 ## Contents
 
