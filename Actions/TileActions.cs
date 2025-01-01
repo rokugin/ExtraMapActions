@@ -35,6 +35,7 @@ public class TileActions {
         GameLocation.RegisterTileAction("EMA_Fireplace", HandleFireplace);
         GameLocation.RegisterTileAction("EMA_DivorceBook", HandleDivorce);
         GameLocation.RegisterTileAction("EMA_LedgerBook", HandleLedger);
+        //GameLocation.RegisterTileAction("EMA_Campfire", HandleCampfire);
     }
 
     bool HandleCraneGame(GameLocation location, string[] args, Farmer farmer, Point point) {
@@ -179,6 +180,12 @@ public class TileActions {
         } else {
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SharedWallets_Client"));
         }
+
+        return true;
+    }
+
+    bool HandleCampfire(GameLocation location, string[] args, Farmer farmer, Point point) {
+        
 
         return true;
     }
