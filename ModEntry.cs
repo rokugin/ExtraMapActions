@@ -1,6 +1,5 @@
 ﻿using ExtraMapActions.Actions;
 using ExtraMapActions.Framework;
-using ExtraMapActions.Models;
 using ExtraMapActions.Patches;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
