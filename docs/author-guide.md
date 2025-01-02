@@ -8,6 +8,7 @@
   * [Doors](#doors)
 * [Extras](#extras)
   * [Crane Game Prizes](#craneprizes)
+  * [Replacing Existing Doors](#doorsextra)
 
 ## Introduction<span id="introduction"></span>
 Extra Map Actions adds new tile actions, properties, and map properties.<br>
@@ -129,46 +130,98 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
 <br>
 
 ### Doors<span id="doors"></span>
-If adding a custom door to an existing map see `<link to extras section>`.
+If adding a custom door to an existing map you should read through this section and see [Replacing Existing Doors](#doorsextra) in the Extras section for additional information.<br>
+
+In order to place custom doors on a custom map, you need to:
+  * Place at least the bottom transparent tile of the door on the `Buildings` tile layer
+  * Add the doors position to the `Doors` Map Property
+  * Add an `Action Door` tile property to the bottom tile of the door
+  * Add an `EMA_CustomDoor <customDoorsKey>` tile property to that same tile
+  * Add an entry to `rokugin.EMA/CustomDoors` for the tile property to link to
+
+Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.
+
+<br>
+
+#### Transparent Tiles
+The only required transparent tile is the bottom one that goes on the `Buildings` layer, however the game will automatically fill in the two above that tile from the tilesheet.<br>
+You can leave those two tiles blank on the tilesheet. This is important to keep in mind if you have a custom door in a regular tilesheet, so you keep those tiles open.<br>
+
+If creating a door that's larger than 3 tiles tall, make sure to only place up to the bottom 3 transparent tiles.<br>
+This mod doesn't currently adjust the removal of the temporary tiles, so if you place more than the bottom 3 then the rest will still be there when the door opens.
 
 <br>
 
 #### Doors Map Property
 The custom door must be added to the `Doors` Map Property.<br>
+Only the coordinates for each door are actually used, so the entries you add can look something like: `10 12 0 0`<br>
+
 Tiled example<br>
 
-CP example<br>
+If you want to add your `Doors` Map Property through CP instead you can do something like this:<span id="doormapproperty"></span>
 ```jsonc
-
+{
+  "Action": "EditMap",
+  "Target": "Maps/ExampleMap",
+  "MapProperties": {
+    "Doors": "10 12 0 0"
+  }
+}
 ```
+In my opinion, this would make it more readable but is a little more annoying since you have to go between two programs to get the coordinates and set them.
 
 <br>
 
 #### Action Door Tile Property
 Custom doors still use the regular `Action Door` tile property.<br>
+
 Tiled example<br>
 
-CP example<br>
+Setting this in CP would look something like this:
 ```jsonc
-
+{
+  "Action": "EditMap",
+  "Target": "Maps/ExampleMap",
+  "MapTiles": [
+    {
+      "Layer": "Buildings",
+      "Position": {"X": 10, "Y": 12},
+      "SetProperties": {
+        "Action": "Door"
+      }
+    }
+  ]
+}
 ```
 
 <br>
 
 #### EMA_CustomDoor Tile Property
 A tile property for linking the door to the appropriate Sprite settings in `rokugin.EMA/CustomDoors`.<br>
+
 Tiled example goes here.<br>
 
 CP example goes here.<br>
 ```jsonc
-
+{
+  "Action": "EditMap",
+  "Target": "Maps/ExampleMap",
+  "MapTiles": [
+    {
+      "Layer": "Buildings",
+      "Position": {"X": 10, "Y": 12},
+      "SetProperties": {
+        "EMA_CustomDoor": "rokuginExample"
+      }
+    }
+  ]
+}
 ```
-
-The value of the property must match a key in the custom doors data asset's dictionary.
+The value of the property must match a key in the custom doors data asset.
 
 <br>
 
-#### Custom Doors Data Asset
+#### Custom Doors Data Asset<span id="customdoorsasset"></span>
 A dictionary of string → models, used to construct Temporary Animated Sprites of the door opening animation.
 
 | Field | Description |
@@ -187,7 +240,7 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
   "Action": "EditData",
   "Target": "rokugin.EMA/CustomDoors",
   "Entries": {
-    "rokugin.Example": {
+    "rokuginExample": {
       "Texture": "Maps/rokuginDoors",
       "SourceRect": {"X": 16, "Y": 0, "Width": 16, "Height": 48},
       "Flip": false,
@@ -314,3 +367,33 @@ Notes:<br>
 This is obviously optional if you don't want to clear default prize groups and the same rules as earlier apply if you do, any groups you clear have to have an entry in the previous patch to add a new entry, empty groups will cause errors.
 
 The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.<br><br>
+
+<br>
+
+### Replacing Existing Doors<span id="doorsextra"></span>
+In order to add custom doors to an existing map, you need to:
+ * Add your custom doors transparent tiles or replace the tiles of existing doors with your custom doors tiles
+ * Add your doors to the maps `Doors` Map Property
+ * Make sure you have an entry in the custom doors data asset
+
+The easiest way to add or replace the transparent tiles is patching them in with EditMap and a small tmx, this also allows you to have the tile properties you need.<br>
+The only needed tile is the bottom of the door that goes on the Buildings layer. You will also need the `Action Door` and `EMA_CustomDoor <customDoorKey>` tile properties.<br>
+
+If you're adding doors to a map that doesn't already have a `Doors` Map Property then you can simply patch it in with `EditMap` [as described earlier](#doormapproperty).<br>
+If you're adding doors to a map that already has a `Doors` Map Property, in order to avoid having to rewrite it and to maintain compat, you'll need to use a [`Text Operation Append`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/text-operations.md) to add to the values:<br>
+```jsonc
+{
+  "Action": "EditMap",
+  "Target": "Maps/ExampleMap",
+  "TextOperations": [
+    {
+      "Operation": "Append",
+      "Target": ["MapProperties", "Doors"],
+      "Delimiter": " ",
+      "Value": "10 12 0 0"
+    }
+  ]
+}
+```
+
+Adding an entry to the custom doors data asset [was covered earlier as well](#customdoorsasset).
