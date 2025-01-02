@@ -1,11 +1,13 @@
 # Extra Map Actions (EMA)
 
 ## Contents
-
 * [Introduction](#introduction)
-* [Examples](#examples)
+* [Usage](#usage)
   * [Fireplaces](#fireplaces)
   * [Doors](#doors)
+* [See Also](#seealso)
+
+* [Examples](#examples)
 * [Extras](#extras)
   * [Crane Game Prizes](#craneprizes)
   * [Replacing Existing Doors](#doorsextra)
@@ -31,9 +33,9 @@ Extra Map Actions adds new tile actions, properties, and map properties.<br>
 | :--- | :--- |
 | EMA_FireplaceLocation \[`<X> <Y> <fireplaceConditionsKey>`] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
 
-The config contains two settings, `Debug Logging` and `Crane Game Cost`. Debug Logging will post logs to the console window as you interact with tiles that have the appropriate TileData, it's not that useful.<br>
+The config contains two settings, `Debug Logging` and `Crane Game Cost`.<br>
 Crane Game Cost must be a positive value or zero.<br>
-If zero the prompt will change to reflect that it's free, otherwise if the player has enough money they'll be charged the cost when they select Yes to start playing.
+If zero, the prompt will change to reflect that it's free, otherwise if the player has enough money they'll be charged the cost when they select `Yes` on the dialogue box.
 
 ## Examples<span id="examples"></span>
 ### Fireplaces<span id="fireplaces"></span>
