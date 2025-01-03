@@ -1,0 +1,319 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Format": "2.4.0",
+  "Changes": [
+    {
+      "LogName": "Load custom doors tilesheet for use on custom map and data asset references",
+      "Action": "Load",
+      "Target": "Maps/{{ModId}}_AviroenDoors",
+      "FromFile": "assets/AviroenDoors.png"
+    },
+    {
+      "LogName": "Load custom map",
+      "Action": "Load",
+      "Target": "Maps/{{ModId}}_JojaDoorEmporium",
+      "FromFile": "assets/JojaDoorEmporium.tmx"
+    },
+    {
+      "LogName": "Add custom location",
+      "Action": "EditData",
+      "Target": "Data/Locations",
+      "Entries": {
+        "{{ModId}}_JojaDoorEmporium": {
+          "DisplayName": "Joja Door Emporium",
+          "DefaultArrivalTile": {"X": 13, "Y": 29},
+          "CreateOnLoad": {
+            "MapPath": "Maps/{{ModId}}_JojaDoorEmporium"
+          }
+        }
+      }
+    },
+    {
+      "Action": "EditData",
+      "Target": "rokugin.EMA/CustomDoors",
+      "Entries": {
+        "SolidDoorBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 0, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 0, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 48, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 48, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 96, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 96, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 144, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 144, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 192, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 192, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 240, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 240, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 288, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 288, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 336, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 336, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SolidDoorRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 384, "Width": 16, "Height": 48},
+        },
+        "SolidDoorFlipRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 32, "Y": 384, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 0, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 0, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 48, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 48, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 96, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 96, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 144, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 144, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 192, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 192, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 240, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 240, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 288, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 288, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 336, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 336, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "GlassDoorRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 384, "Width": 16, "Height": 48},
+        },
+        "GlassDoorFlipRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 128, "Y": 384, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 0, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 0, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 48, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipCyan": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 48, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 96, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipGreen": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 96, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 144, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipPink": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 144, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 192, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipCornflower": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 192, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 240, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipPolo": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 240, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 288, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipYellow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 288, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 336, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipPurple": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 336, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "SaloonDoorRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 384, "Width": 16, "Height": 48},
+        },
+        "SaloonDoorFlipRed": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 224, "Y": 384, "Width": 16, "Height": 48},
+          "Flip": true
+        },
+        "BigDoorFast": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 16, "Y": 432, "Width": 16, "Height": 96},
+          "PositionOffset": "0, -3"
+        },
+        "BigDoorSlow": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 16, "Y": 528, "Width": 16, "Height": 96},
+          "AnimationFrames": 7,
+          "PositionOffset": "0, -3"
+        },
+        "SolidDoorSideways": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 16, "Y": 624, "Width": 16, "Height": 48}
+        },
+        "GlassDoorSideways": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 96, "Y": 624, "Width": 16, "Height": 48}
+        },
+        "SaloonDoorSideways": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 176, "Y": 624, "Width": 16, "Height": 48}
+        },
+        "SaloonDoorSidewaysTop": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 176, "Y": 576, "Width": 16, "Height": 48},
+          "DepthOffset": -40
+        },
+        "BigDoorFastDouble": { //This example currently just shows off how doors wider than 1 tile don't work properly
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 112, "Y": 432, "Width": 32, "Height": 96},
+          "PositionOffset": "0, -3"
+        },
+        "SolidHalfDoorBrown": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": {"X": 160, "Y": 528, "Width": 16, "Height": 32},
+          "PositionOffset": "0, 1"
+        }
+      }
+    }
+  ]
+}

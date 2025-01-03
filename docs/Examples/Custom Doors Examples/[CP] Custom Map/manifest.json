@@ -1,0 +1,11 @@
+{
+  "Name": "Custom Doors Custom Map Example",
+  "Author": "rokugin",
+  "Version": "1.0.0",
+  "Description": "Examples of adding custom doors to a new map.",
+  "UniqueID": "rokugin.excustomdoors1",
+  "UpdateKeys": [],
+  "ContentPackFor": {
+    "UniqueID": "Pathoschild.ContentPatcher"
+  }
+}

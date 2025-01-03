@@ -1,0 +1,72 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Format": "2.4.0",
+  "Changes": [
+    {
+      "LogName": "Load custom doors tilesheet for use in data asset references",
+      "Action": "Load",
+      "Target": "Maps/{{ModId}}_AviroenDoors",
+      "FromFile": "assets/AviroenDoors.png"
+    },
+    ///Start of Replacing An Existing Door Section///
+    {
+      "LogName": "Patch SeedShop map with custom door tmx",
+      "Action": "EditMap",
+      "Target": "Maps/SeedShop",
+      "FromFile": "assets/SeedShopDoorPatch.tmx",
+      "ToArea": { "X": 14, "Y": 16, "Width": 1, "Height": 1 },
+      "PatchMode": "Overlay"
+    },
+    {
+      "LogName": "Add sprite info to custom doors data asset",
+      "Action": "EditData",
+      "Target": "rokugin.EMA/CustomDoors",
+      "Entries": {
+        "rokuginExample": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": { "X": 32, "Y": 384, "Width": 16, "Height": 48 }
+        }
+      }
+    },
+    ///End of Replacing An Existing Door Section///
+
+    ///Start of Adding A New Door To An Existing Map///
+    {
+      "LogName": "Patch JoshHouse map with custom door tmx",
+      "Action": "EditMap",
+      "Target": "Maps/JoshHouse",
+      "FromFile": "assets/JoshHouseDoorPatch.tmx",
+      "ToArea": { "X": 9, "Y": 18, "Width": 2, "Height": 1 },
+      "PatchMode": "Overlay"
+    },
+    {
+      "LogName": "Add sprite info to custom doors data asset",
+      "Action": "EditData",
+      "Target": "rokugin.EMA/CustomDoors",
+      "Entries": {
+        "rokuginExample1": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": { "X": 32, "Y": 240, "Width": 16, "Height": 48 }
+        },
+        "rokuginExample1Flip": {
+          "Texture": "Maps/{{ModId}}_AviroenDoors",
+          "SourceRect": { "X": 32, "Y": 240, "Width": 16, "Height": 48 },
+          "Flip": true
+        }
+      }
+    },
+    {
+      "LogName": "Add new door coordinates to Doors map property",
+      "Action": "EditMap",
+      "Target": "Maps/JoshHouse",
+      "TextOperations": [
+        {
+          "Operation": "Append",
+          "Target": ["MapProperties", "Doors"],
+          "Delimiter": " ",
+          "Value": "9 18 0 0 10 18 0 0"
+        }
+      ]
+    }
+  ]
+}

@@ -54,12 +54,12 @@ public static class InteriorDoorsPatch {
                         __instance.Sprite.resetEnd();
                     }
                 } else {
-                    ModEntry.SMonitor.Log($"\nEMA_CustomDoor value not set, please check your tile properties.\n",
+                    ModEntry.SMonitor.Log($"\nNo entry for key \"{value}\" found in custom doors data asset. Check your patch to the data asset.\n",
                         StardewModdingAPI.LogLevel.Error);
                     return;
                 }
-            } else {
-                ModEntry.SMonitor.Log($"\nNo entry for \"{value}\" found in custom doors data asset. Please check your patch to the data asset.",
+            } else if (__instance.Tile.Properties.ContainsKey("EMA_CustomDoor")) {
+                ModEntry.SMonitor.Log($"\nEMA_CustomDoor value not set, check your tile properties.\n",
                     StardewModdingAPI.LogLevel.Error);
                 return;
             }

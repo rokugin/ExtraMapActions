@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="1" height="1" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="26">
+ <tileset firstgid="1" name="AviroenDoors" tilewidth="16" tileheight="16" tilecount="756" columns="18">
+  <image source="AviroenDoors.png" width="288" height="672"/>
+ </tileset>
+ <layer id="3" name="Buildings" width="1" height="1">
+  <data encoding="csv">
+469
+</data>
+ </layer>
+ <objectgroup id="15" name="Buildings">
+  <object id="25" name="TileData" x="0" y="0" width="16" height="16">
+   <properties>
+    <property name="Action" value="Door"/>
+    <property name="EMA_CustomDoor" value="rokuginExample"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
