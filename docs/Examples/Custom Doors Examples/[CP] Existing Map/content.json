@@ -22,7 +22,7 @@
       "Action": "EditData",
       "Target": "rokugin.EMA/CustomDoors",
       "Entries": {
-        "rokuginExample": {
+        "rokugin.SeedShop": {
           "Texture": "Maps/{{ModId}}_AviroenDoors",
           "SourceRect": { "X": 32, "Y": 384, "Width": 16, "Height": 48 }
         }
@@ -46,12 +46,14 @@
       "Entries": {
         "rokuginExample1": {
           "Texture": "Maps/{{ModId}}_AviroenDoors",
-          "SourceRect": { "X": 32, "Y": 240, "Width": 16, "Height": 48 }
+          "SourceRect": { "X": 32, "Y": 240, "Width": 16, "Height": 48 },
+          "AudioCue": "busDriveOff"
         },
         "rokuginExample1Flip": {
           "Texture": "Maps/{{ModId}}_AviroenDoors",
           "SourceRect": { "X": 32, "Y": 240, "Width": 16, "Height": 48 },
-          "Flip": true
+          "Flip": true,
+          "AudioCue": "coin"
         }
       }
     },

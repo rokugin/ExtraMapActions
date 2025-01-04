@@ -12,13 +12,13 @@
   <object id="19" name="TileData" x="0" y="0" width="16" height="16">
    <properties>
     <property name="Action" value="Door"/>
-    <property name="EMA_CustomDoor" value="rokuginExample1"/>
+    <property name="EMA_CustomDoor" value="rokugin.JoshHouseLeft"/>
    </properties>
   </object>
   <object id="20" name="TileData" x="16" y="0" width="16" height="16">
    <properties>
     <property name="Action" value="Door"/>
-    <property name="EMA_CustomDoor" value="rokuginExample1Flip"/>
+    <property name="EMA_CustomDoor" value="rokugin.JoshHouseRight"/>
    </properties>
   </object>
  </objectgroup>

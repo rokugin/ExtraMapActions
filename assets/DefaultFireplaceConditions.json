@@ -1,5 +1,6 @@
 {
   "AlwaysOn": {
-    "Condition": "true"
+    "Condition": "true",
+    "UsePlayerState":  false
   }
 }

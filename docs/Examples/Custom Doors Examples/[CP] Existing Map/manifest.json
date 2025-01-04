@@ -5,6 +5,12 @@
   "Description": "Example of adding custom doors to an existing map.",
   "UniqueID": "rokugin.excustomdoors2",
   "UpdateKeys": [],
+  "Dependencies": [
+    {
+      "UniqueID": "rokugin.extramapactions",
+      "IsRequired": true
+    }
+  ],
   "ContentPackFor": {
     "UniqueID": "Pathoschild.ContentPatcher"
   }

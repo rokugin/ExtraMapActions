@@ -11,5 +11,6 @@ public sealed class CustomDoorsModel {
     public float FrameDuration { get; set; } = 100f;
     public Vector2 PositionOffset { get; set; } = new Vector2(0, 0);
     public float DepthOffset { get; set; } = 0;
+    public string? AudioCue { get; set; }
 
 }

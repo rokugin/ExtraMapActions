@@ -2,7 +2,7 @@
   "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Extra Map Actions",
   "Author": "rokugin",
-  "Version": "1.1.0",
+  "Version": "1.2.0",
   "Description": "Code that responds to interacting with custom map actions.",
   "UniqueID": "rokugin.extramapactions",
   "EntryDll": "ExtraMapActions.dll",

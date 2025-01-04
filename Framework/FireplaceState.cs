@@ -8,12 +8,12 @@ public class FireplaceState {
 
     public Point Point { get; set; }
 
-    public string State { get; set; }
+    public bool On { get; set; }
 
-    public FireplaceState(string location, Point point, string state) {
+    public FireplaceState(string location, Point point, bool on) {
         Location = location;
         Point = point;
-        State = state;
+        On = on;
     }
 
 }

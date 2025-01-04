@@ -110,16 +110,11 @@ public class TileActions {
 
         point.X += xOffset;
         string lightSourceId = $"{location.NameOrUniqueName}_Fireplace_{point.X}_{point.Y}";
-
-        if (Game1.currentLightSources.ContainsKey(lightSourceId + "_1")) {
-            location.setFireplace(on: false, point.X, point.Y);
-            location.modData[$"EMA_Fireplace_{point.X}_{point.Y}"] = "off";
-            Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, "off"), "FireplaceState");
-        } else {
-            location.setFireplace(on: true, point.X, point.Y);
-            location.modData[$"EMA_Fireplace_{point.X}_{point.Y}"] = "on";
-            Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, "on"), "FireplaceState");
-        }
+        bool fireplaceOn = Game1.currentLightSources.ContainsKey(lightSourceId + "_1");
+        string oppositeState = fireplaceOn ? "off" : "on";
+        location.setFireplace(on: !fireplaceOn, point.X, point.Y);
+        location.modData[$"EMA_Fireplace_{point.X}_{point.Y}"] = oppositeState;
+        Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, !fireplaceOn), "FireplaceState");
         location.modData["rokugin.EMA"] = "Fireplace";
 
         return true;
@@ -185,7 +180,7 @@ public class TileActions {
     }
 
     bool HandleCampfire(GameLocation location, string[] args, Farmer farmer, Point point) {
-        
+
 
         return true;
     }
@@ -216,7 +211,7 @@ public class TileActions {
             }
         }
     }
-    
+
     void ChooseRecipient() {
         sendMoneyMapping.Clear();
         List<Response> otherFarmers = new List<Response>();

@@ -16,7 +16,7 @@ internal class ModEntry : Mod {
     TileActions TileActions = new();
     LogLevel logLevel => Config.DebugLogging ? LogLevel.Debug : LogLevel.Trace;
     public static string ModId = null!;
-    
+
     //int smokeTimer = 250;
     //string TextureName = "LooseSprites\\Cursors";
     //Rectangle SourceRect = new Rectangle(372, 1956, 10, 10);
@@ -33,8 +33,7 @@ internal class ModEntry : Mod {
         helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         helper.Events.Player.Warped += OnWarped;
         helper.Events.Multiplayer.ModMessageReceived += OnModMessageReceived;
-        helper.Events.GameLoop.DayEnding += OnDayEnding;
-        helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
+        helper.Events.GameLoop.DayStarted += OnDayStarted;
         //helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.OnAssetInvalidated(e);
@@ -46,6 +45,51 @@ internal class ModEntry : Mod {
         harmony.Patch(
             original: AccessTools.Method(typeof(InteriorDoor), nameof(InteriorDoor.ResetLocalState)),
             postfix: new HarmonyMethod(typeof(InteriorDoorsPatch), nameof(InteriorDoorsPatch.ResetLocalState_Postfix)));
+        harmony.Patch(
+            original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.openDoor)),
+            prefix: new HarmonyMethod(typeof(GameLocationPatch), nameof(GameLocationPatch.OpenDoor_Prefix)));
+    }
+
+    private void OnDayStarted(object? sender, DayStartedEventArgs e) {
+        GameLocation location = Game1.currentLocation;
+
+        SetFireplacesByMapProperty(location);
+    }
+
+    void SetFireplacesByMapProperty(GameLocation location) {
+        Point point = new();
+        string[] fireplaceLocation = location.GetMapPropertySplitBySpaces("EMA_FireplaceLocation");
+
+        for (int i = 0; i < fireplaceLocation.Length; i += 3) {
+            if (!int.TryParse(fireplaceLocation[i], out point.X)) {
+                Monitor.Log($"\nInvalid X field for entry #{i} in EMA_FireplaceLocation map property for {location.NameOrUniqueName}.\n", logLevel);
+                return;
+            }
+            if (!int.TryParse(fireplaceLocation[i + 1], out point.Y)) {
+                Monitor.Log($"\nInvalid Y field for entry #{i} in EMA_FireplaceLocation map property for {location.NameOrUniqueName}.\n", logLevel);
+                return;
+            }
+
+            bool flag = GameStateQuery.CheckConditions(AssetManager.FireplaceConditionsData[fireplaceLocation[i + 2]].Condition, location, Game1.player);
+            if (AssetManager.FireplaceConditionsData[fireplaceLocation[i + 2]].UsePlayerState) flag = PreviousState(location, flag, point);
+            SetFireplace(location, point, flag);
+        }
+    }
+
+    bool PreviousState(GameLocation location, bool flag, Point point) {
+        if (!location.modData.TryGetValue("rokugin.EMA", out string value)) return flag;
+
+        if (location.modData.TryGetValue($"EMA_Fireplace_{point.X}_{point.Y}", out value)) {
+            return value == "on" ? true : false;
+        }
+        return flag;
+    }
+
+    void SetFireplace(GameLocation location, Point point, bool flag) {
+        string state = flag ? "on" : "off";
+        location.setFireplace(on: flag, point.X, point.Y, false);
+        location.modData[$"EMA_Fireplace_{point.X}_{point.Y}"] = state;
+        Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, flag), "FireplaceState", [ModManifest.UniqueID]);
     }
 
     //private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e) {
@@ -74,115 +118,22 @@ internal class ModEntry : Mod {
     //    }
     //}
 
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) {
-        GameLocation location = Game1.currentLocation;
-        string[] values = location.GetMapPropertySplitBySpaces("EMA_FireplaceLocation");
-        if (values.Length < 3) return;
-
-        Point point = new();
-
-        if (!location.modData.TryGetValue("rokugin.EMA", out string value)) {
-            return;
-        }
-
-        for (int i = 0; i < values.Length; i += 3) {
-            if (!int.TryParse(values[i], out point.X)) {
-                Monitor.Log("\nTile X is not valid. Must be an integer.", LogLevel.Error);
-                return;
-            }
-            if (!int.TryParse(values[i + 1], out point.Y)) {
-                Monitor.Log("\nTile Y is not valid. Must be an integer.", LogLevel.Error);
-                return;
-            }
-            if (!GameStateQuery.CheckConditions(AssetManager.FireplaceConditionsData[values[i + 2]].Condition, location, Game1.player)) {
-                Monitor.Log("\nConditions not met.", logLevel);
-                location.setFireplace(on: false, point.X, point.Y, false);
-                return;
-            }
-
-            location.setFireplace(on: true, point.X, point.Y, false);
-        }
-
-        foreach (string key in location.modData.Keys) {
-            if (!key.StartsWith("EMA_Fireplace")) continue;
-
-            string[] keySplit = key.Split("_");
-            int.TryParse(keySplit[2], out int X);
-            int.TryParse(keySplit[3], out int Y);
-
-            location.setFireplace(on: location.modData[key] == "on" ? true : false, X, Y, false);
-        }
-    }
-
-    private void OnDayEnding(object? sender, DayEndingEventArgs e) {
-        if (!Game1.IsMasterGame) return;
-
-        Utility.ForEachLocation((GameLocation location) => {
-            if (location.modData.TryGetValue("rokugin.EMA", out string value)) {
-                foreach (string key in location.modData.Keys) {
-                    if (!key.StartsWith("EMA_Fireplace")) continue;
-
-                    location.modData.Remove(key);
-                }
-            }
-
-            return true;
-        });
-    }
-
     private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e) {
-        if (e.FromModID == ModId) {
-            if (e.Type == "FireplaceState") {
-                var fireplaceState = e.ReadAs<FireplaceState>();
-                GameLocation location = Game1.getLocationFromName(fireplaceState.Location);
-                if (fireplaceState.State == "on") {
-                    location.setFireplace(on: true, fireplaceState.Point.X, fireplaceState.Point.Y);
-                } else {
-                    location.setFireplace(on: false, fireplaceState.Point.X, fireplaceState.Point.Y);
-                }
-            }
+        if (e.FromModID == ModId && e.Type == "FireplaceState") {
+            var fireplaceState = e.ReadAs<FireplaceState>();
+            Game1.getLocationFromName(fireplaceState.Location).setFireplace(on: fireplaceState.On, fireplaceState.Point.X, fireplaceState.Point.Y);
         }
     }
 
     private void OnWarped(object? sender, WarpedEventArgs e) {
-        Point point = new();
         GameLocation location = e.NewLocation;
-        string[] fireplaceMapProperty = location.GetMapPropertySplitBySpaces("EMA_FireplaceLocation");
-        string[] smokeMapProperty = location.GetMapPropertySplitBySpaces("EMA_SmokeLocation");
-        
-        if (fireplaceMapProperty.Length >=3 && location.modData.TryGetValue("rokugin.EMA", out string value)) {
-            for (int i = 0; i < fireplaceMapProperty.Length; i += 3) {
-                if (!int.TryParse(fireplaceMapProperty[i], out point.X)) {
-                    Monitor.Log("\nTile X is not valid. Must be an integer.", LogLevel.Error);
-                    return;
-                }
-                if (!int.TryParse(fireplaceMapProperty[i + 1], out point.Y)) {
-                    Monitor.Log("\nTile Y is not valid. Must be an integer.", LogLevel.Error);
-                    return;
-                }
-                if (!GameStateQuery.CheckConditions(AssetManager.FireplaceConditionsData[fireplaceMapProperty[i + 2]].Condition, location, Game1.player)) {
-                    Monitor.Log("\nConditions not met.", logLevel);
-                    location.setFireplace(on: false, point.X, point.Y, false);
-                    return;
-                }
+        //string[] smokeMapProperty = location.GetMapPropertySplitBySpaces("EMA_SmokeLocation");
 
-                location.setFireplace(on: true, point.X, point.Y, false);
-            }
+        SetFireplacesByMapProperty(location);
 
-            foreach (string key in location.modData.Keys) {
-                if (!key.StartsWith("EMA_Fireplace")) continue;
+        //if (smokeMapProperty.Length > 0) {
 
-                string[] keySplit = key.Split("_");
-                int.TryParse(keySplit[2], out int X);
-                int.TryParse(keySplit[3], out int Y);
-
-                location.setFireplace(on: location.modData[key] == "on" ? true : false, X, Y, false);
-            }
-        }
-
-        if (smokeMapProperty.Length > 0) {
-
-        }
+        //}
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e) {

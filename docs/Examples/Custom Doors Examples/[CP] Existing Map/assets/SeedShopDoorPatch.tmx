@@ -12,7 +12,7 @@
   <object id="25" name="TileData" x="0" y="0" width="16" height="16">
    <properties>
     <property name="Action" value="Door"/>
-    <property name="EMA_CustomDoor" value="rokuginExample"/>
+    <property name="EMA_CustomDoor" value="rokugin.SeedShop"/>
    </properties>
   </object>
  </objectgroup>
