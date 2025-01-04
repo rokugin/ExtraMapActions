@@ -87,6 +87,8 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
 
 ### Tile Properties<span id="tileprops"></span>
 ### Doors
+Examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/Custom%20Doors%20Examples).<br>
+
 In order to place custom doors on a custom map, you need to:
   * Place at least the bottom transparent tile of the door on the `Buildings` tile layer
   * Add the doors position to the `Doors` Map Property
@@ -95,8 +97,6 @@ In order to place custom doors on a custom map, you need to:
   * Add an entry to `rokugin.EMA/CustomDoors` for the tile property to link to
 
 Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.<br>
-
-Examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/Custom%20Doors%20Examples).
 <br>
 
 #### Transparent Tiles
