@@ -3,14 +3,9 @@
 ## Contents
 * [Introduction](#introduction)
 * [Usage](#usage)
-  * [Fireplaces](#fireplaces)
-  * [Doors](#doors)
-* [See Also](#seealso)
-
-* [Examples](#examples)
-* [Extras](#extras)
-  * [Crane Game Prizes](#craneprizes)
-  * [Replacing Existing Doors](#doorsextra)
+  * [Tile Actions](#tileactions)
+  * [Map Properties](#mapprops)
+  * [Tile Properties](#tileprops)
 
 ## Introduction<span id="introduction"></span>
 Extra Map Actions adds new tile actions, properties, and map properties.<br>
@@ -24,90 +19,43 @@ Extra Map Actions adds new tile actions, properties, and map properties.<br>
 | EMA_LedgerBook | Opens [ledger book](https://stardewvalleywiki.com/Multiplayer#Money) |
 <br>
 
+| Map Property | Description |
+| :--- | :--- |
+| EMA_FireplaceLocation \[`<X> <Y> <fireplaceConditionsKey>`] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
+<br>
+
 | Tile Property | Description |
 | :--- | :--- |
 | EMA_CustomDoor `<customDoorKey>` | Links this door to an entry in the `rokugin.EMA/CustomDoors` asset. |
 <br>
-
-| Map Property | Description |
-| :--- | :--- |
-| EMA_FireplaceLocation \[`<X> <Y> <fireplaceConditionsKey>`] + | Conditionally starts or stops a fireplace.<br>Combine with `EMA_Fireplace` tile action to make it further operable. |
-
 The config contains two settings, `Debug Logging` and `Crane Game Cost`.<br>
 Crane Game Cost must be a positive value or zero.<br>
 If zero, the prompt will change to reflect that it's free, otherwise if the player has enough money they'll be charged the cost when they select `Yes` on the dialogue box.
 
-## Examples<span id="examples"></span>
-### Fireplaces<span id="fireplaces"></span>
-#### EMA_Fireplace Tile Action
-A tile action that starts or stops a fireplace. `EMA_Fireplace` should be placed on the left tile of the fireplace and `EMA_Fireplace right` should be placed on the right tile.<br>
-
-Fireplace tile actions can be added directly to Tiled:<br>
-![Screenshot of properties window with fireplace left action filled out.](screenshots/fireplace-left-tiled.png)<br>
-![Screenshot of properties window with fireplace right action filled out.](screenshots/fireplace-right-tiled.png)
-
-
-Or they can be added through CP:<br>
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/<TargetMapGoesHere>",
-  "MapTiles": [
-    {
-      "Position": {// tile position of the left tile of the fireplace
-        "X": 0,
-        "Y": 4
-      },
-      "Layer": "Buildings",
-      "SetProperties": {
-        "Action": "EMA_Fireplace"
-      }
-    },
-    {
-      "Position": {// tile position of the right tile of the fireplace
-        "X": 1,
-        "Y": 4
-      },
-      "Layer": "Buildings",
-      "SetProperties": {
-        "Action": "EMA_Fireplace right"
-      }
-    }
-  ]
-}
-```
+## Usage<span id="usage"></span>
+### Tile Actions<span id="tileactions"></span>
+Tile actions are added directly in [Tiled](https://stardewvalleywiki.com/Modding:Maps#Tile_properties) or as part of a block in [CP](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editmap.md).<br>
 <br>
 
-#### EMA_FireplaceLocation Map Property
-A map property that combines with a new CP dictionary asset `rokugin.EMA/FireplaceConditions` to set up conditionally active fireplaces.<br>
+#### EMA_OfflineFarmhandInventory
+Normally an option on the Lost and Found box in the Mayor's Manor, if in a multiplayer game with offline farmhands, allows you to choose an offline player's inventory to open in order to retrieve item's from them.<br>
+<br>
 
-The format of Fireplace Location is:<br>
+#### EMA_Fireplace
+Interacting with this tile starts or stops a fireplace, based on the location of this tile. Intended to be placed inside a normal 2 tile wide fireplace. `EMA_Fireplace` should be on the left tile and `EMA_Fireplace right` should be on the right tile.<br>
+
+### Map Properties<span id="mapprops"></span>
+#### EMA_FireplaceLocation
+A map property that combines with a custom data asset: `rokugin.EMA/FireplaceConditions`, to set up conditionally active fireplaces.<br>
+
+The format of `EMA_FireplaceLocation` is:<br>
 `EMA_FireplaceLocation [<intX> <intY> <fireplaceConditionsKey>] +`<br>
-The `+` indicates that you can create multiple entries, separated by a space. Check the example below.<br>
+Like the main wiki, `[ ]` indicates a group of required fields that create one entry and `+` indicates that you can create multiple entries, separated by a space.<br>
 
 `<intX> <intY>` is the tile coordinates of the left tile of the fireplace.<br>
-`<fireplaceConditionsKey>` is the entry key of the condition you want to check to determine if the fireplace should turn on.<br>
-AlwaysOn is the default key in the asset.<br>
+`<fireplaceConditionsKey>` is the entry key of the condition you want to check in the Fireplace Conditions data asset to determine if the fireplace should turn on.<br>
 
-Make sure to remove all the `<>`.<br>
-
-The map property can be set in Tiled:<br>
-![Screenshot of map properties window with fireplace location property filled out and highlighted.](screenshots/fireplacelocation-map-property.png)<br>
-
-![Screenshot of map properties window with fireplace location property filled out with multiple entries and edit text window partially shown](screenshots/fireplacelocation-tiled-multiple.png)
-
-
-Or with CP:<br>
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/<TargetMapGoesHere>",
-  "MapProperties": {
-    "EMA_FireplaceLocation": "1 4 AlwaysOn 10 4 AlwaysOn"
-  }
-}
-```
-
+Make sure to remove all the `<>` angle brackets when filling in your map property.<br>
 <br>
 
 #### Fireplace Conditions Data Asset
@@ -130,10 +78,10 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
 ```
 
 <br>
-
-### Doors<span id="doors"></span>
-If adding a custom door to an existing map you should read through this section and see [Replacing Existing Doors](#doorsextra) in the Extras section for additional information.<br>
-
+:---
+<br>
+### Tile Properties<span id="tileprops"></span>
+#### Doors
 In order to place custom doors on a custom map, you need to:
   * Place at least the bottom transparent tile of the door on the `Buildings` tile layer
   * Add the doors position to the `Doors` Map Property
@@ -157,70 +105,15 @@ This mod doesn't currently adjust the removal of the temporary tiles, so if you 
 #### Doors Map Property
 The custom door must be added to the `Doors` Map Property.<br>
 Only the coordinates for each door are actually used, so the entries you add can look something like: `10 12 0 0`<br>
-
-Tiled example<br>
-
-If you want to add your `Doors` Map Property through CP instead you can do something like this:<span id="doormapproperty"></span>
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/ExampleMap",
-  "MapProperties": {
-    "Doors": "10 12 0 0"
-  }
-}
-```
-In my opinion, this would make it more readable but is a little more annoying since you have to go between two programs to get the coordinates and set them.
-
 <br>
 
 #### Action Door Tile Property
 Custom doors still use the regular `Action Door` tile property.<br>
-
-Tiled example<br>
-
-Setting this in CP would look something like this:
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/ExampleMap",
-  "MapTiles": [
-    {
-      "Layer": "Buildings",
-      "Position": {"X": 10, "Y": 12},
-      "SetProperties": {
-        "Action": "Door"
-      }
-    }
-  ]
-}
-```
-
 <br>
 
 #### EMA_CustomDoor Tile Property
 A tile property for linking the door to the appropriate Sprite settings in `rokugin.EMA/CustomDoors`.<br>
-
-Tiled example goes here.<br>
-
-CP example goes here.<br>
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/ExampleMap",
-  "MapTiles": [
-    {
-      "Layer": "Buildings",
-      "Position": {"X": 10, "Y": 12},
-      "SetProperties": {
-        "EMA_CustomDoor": "rokuginExample"
-      }
-    }
-  ]
-}
-```
-The value of the property must match a key in the custom doors data asset.
-
+The value of the property must match a key in the custom doors data asset.<br>
 <br>
 
 #### Custom Doors Data Asset<span id="customdoorsasset"></span>
@@ -254,148 +147,3 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
   }
 }
 ```
-
-## Extras<span id="extras"></span>
-### Crane Game Prizes<span id="craneprizes"></span>
-Crane game prizes are mostly hardcoded, however you can use `Data/Movies` to add to or completely overwrite the prize lists.<br>
-More detailed information can be found on the [migration page of the wiki](https://stardewvalleywiki.com/Modding:Migrate_to_Stardew_Valley_1.6#Custom_movies), but I have some examples and notes I will make here.<br><br>
-
-#### Example 1
-The first example is for completely overwriting the prize lists so that only your chosen prizes are available:
-```json
-{
-  "Action": "EditData",
-  "Target": "Data/Movies",
-  "TargetField": [
-    "spring_movie_0"
-  ],
-  "Entries": {
-    "CranePrizes": [
-      {
-        "Rarity": 1,
-        "Id": "CommonGroupDiamond",
-        "ItemId": "(O)72"
-      },
-      {
-        "Rarity": 2,
-        "Id": "RareGroupDiamond",
-        "ItemId": "(O)72"
-      },
-      {
-        "Rarity": 3,
-        "Id": "DeluxeGroupDiamond",
-        "ItemId": "(O)72"
-      }
-    ],
-    "ClearDefaultCranePrizeGroups": [
-      1,
-      2,
-      3
-    ]
-  },
-  "When": {
-    "LocationName": "BusStop"
-  },
-  "Update": "OnLocationChange"
-}
-```
-Notes:<br>
-An empty prize group will cause errors, so if you use `ClearDefaultCranePrizeGroup` you have to add at least one entry to `CranePrizes` for every group you clear. In my example, since I'm clearing all three groups, I add the diamond to each group to avoid errors.
-
-The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.
-
-These prize lists are specific to what movie should be playing, even if you haven't unlocked the theater yet, so in order to have prize lists that are the same you have to make changes to the `CranePrizes` for every movie, alternatively this means you can easily have seasonal and alternating yearly different prize lists.<br><br>
-
-#### Example 2
-The next example is for if you only want to add prizes without modifying the existing lists:
-```json
-{
-  "Action": "EditData",
-  "Target": "Data/Movies",
-  "TargetField": [
-    "spring_movie_0",
-    "CranePrizes"
-  ],
-  "Entries": {
-    "-1": {
-      "Rarity": 1,
-      "Id": "CommonDiamond",
-      "ItemId": "(O)72"
-    },
-    "-2": {
-      "Rarity": 2,
-      "Id": "RareDiamond",
-      "ItemId": "(O)72"
-    },
-    "-3": {
-      "Rarity": 3,
-      "Id": "DeluxeDiamond",
-      "ItemId": "(O)72"
-    }
-  },
-  "When": {
-    "LocationName": "BusStop"
-  },
-  "Update": "OnLocationChange"
-}
-```
-Notes:<br>
-This time, in order to avoid overwriting the movie specific prizes, we use `TargetField` to target `CranePrizes` and negative indexed entries in order to only add new entries without risking editing existing entries.
-
-The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.<br><br>
-
-#### Example 3
-Because we're targeting `CranePrizes` like this, we can't also edit `ClearDefaultCranePrizeGroups` in one patch, so if we want to any of the default prize groups, we have to make a separate patch:
-```json
-{
-  "Action": "EditData",
-  "Target": "Data/Movies",
-  "TargetField": [
-    "spring_movie_0",
-    "ClearDefaultCranePrizeGroups"
-  ],
-  "Entries": {
-    "1": "1",
-    "2": "2",
-    "3": "3"
-  },
-  "When": {
-    "LocationName": "BusStop"
-  },
-  "Update": "OnLocationChange"
-}
-```
-Notes:<br>
-This is obviously optional if you don't want to clear default prize groups and the same rules as earlier apply if you do, any groups you clear have to have an entry in the previous patch to add a new entry, empty groups will cause errors.
-
-The `When` and `Update` fields are included to make the changes only happen when you enter the map with your crane game, this way you don't make changes to the default crane game at the theater. I use `BusStop` in my example because that's where my crane game is, but you would use the location name of wherever your crane game is.<br><br>
-
-<br>
-
-### Replacing Existing Doors<span id="doorsextra"></span>
-In order to add custom doors to an existing map, you need to:
- * Add your custom doors transparent tiles or replace the tiles of existing doors with your custom doors tiles
- * Add your doors to the maps `Doors` Map Property
- * Make sure you have an entry in the custom doors data asset
-
-The easiest way to add or replace the transparent tiles is patching them in with EditMap and a small tmx, this also allows you to have the tile properties you need.<br>
-The only needed tile is the bottom of the door that goes on the Buildings layer. You will also need the `Action Door` and `EMA_CustomDoor <customDoorKey>` tile properties.<br>
-
-If you're adding doors to a map that doesn't already have a `Doors` Map Property then you can simply patch it in with `EditMap` [as described earlier](#doormapproperty).<br>
-If you're adding doors to a map that already has a `Doors` Map Property, in order to avoid having to rewrite it and to maintain compat, you'll need to use a [`Text Operation Append`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/text-operations.md) to add to the values:<br>
-```jsonc
-{
-  "Action": "EditMap",
-  "Target": "Maps/ExampleMap",
-  "TextOperations": [
-    {
-      "Operation": "Append",
-      "Target": ["MapProperties", "Doors"],
-      "Delimiter": " ",
-      "Value": "10 12 0 0"
-    }
-  ]
-}
-```
-
-Adding an entry to the custom doors data asset [was covered earlier as well](#customdoorsasset).
