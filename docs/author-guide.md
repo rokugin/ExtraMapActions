@@ -96,7 +96,7 @@ In order to place custom doors on a custom map, you need to:
 
 Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.<br>
 
-Examples can be found [here](Examples/Custom_Doors_Examples).
+Examples can be found [here](Examples/Custom-Doors-Examples).
 <br>
 
 #### Transparent Tiles
