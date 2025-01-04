@@ -43,6 +43,10 @@ Normally an option on the Lost and Found box in the Mayor's Manor, if in a multi
 
 #### EMA_Fireplace
 Interacting with this tile starts or stops a fireplace, based on the location of this tile. Intended to be placed inside a normal 2 tile wide fireplace. `EMA_Fireplace` should be on the left tile and `EMA_Fireplace right` should be on the right tile.<br>
+<br>
+
+
+***
 
 ### Map Properties<span id="mapprops"></span>
 #### EMA_FireplaceLocation
@@ -76,12 +80,13 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
   }
 }
 ```
+<br>
 
-<br>
-:---
-<br>
+
+***
+
 ### Tile Properties<span id="tileprops"></span>
-#### Doors
+### Doors
 In order to place custom doors on a custom map, you need to:
   * Place at least the bottom transparent tile of the door on the `Buildings` tile layer
   * Add the doors position to the `Doors` Map Property
@@ -89,8 +94,9 @@ In order to place custom doors on a custom map, you need to:
   * Add an `EMA_CustomDoor <customDoorsKey>` tile property to that same tile
   * Add an entry to `rokugin.EMA/CustomDoors` for the tile property to link to
 
-Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.
+Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.<br>
 
+Examples can be found [here](Examples/Custom_Doors_Examples).
 <br>
 
 #### Transparent Tiles
@@ -98,8 +104,7 @@ The only required transparent tile is the bottom one that goes on the `Buildings
 You can leave those two tiles blank on the tilesheet. This is important to keep in mind if you have a custom door in a regular tilesheet, so you keep those tiles open.<br>
 
 If creating a door that's larger than 3 tiles tall, make sure to only place up to the bottom 3 transparent tiles.<br>
-This mod doesn't currently adjust the removal of the temporary tiles, so if you place more than the bottom 3 then the rest will still be there when the door opens.
-
+This mod doesn't currently adjust the removal of the temporary tiles, so if you place more than the bottom 3 then the rest will still be there when the door opens.<br>
 <br>
 
 #### Doors Map Property
@@ -137,12 +142,7 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
   "Entries": {
     "rokuginExample": {
       "Texture": "Maps/rokuginDoors",
-      "SourceRect": {"X": 16, "Y": 0, "Width": 16, "Height": 48},
-      "Flip": false,
-      "AnimationFrames": 4,
-      "FrameDuration": 100,
-      "PositionOffset": "0, 0",
-      "DepthOffset": 0
+      "SourceRect": {"X": 16, "Y": 0, "Width": 16, "Height": 48}
     }
   }
 }
