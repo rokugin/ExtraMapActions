@@ -96,7 +96,7 @@ In order to place custom doors on a custom map, you need to:
 
 Currently doors wider than 1 tile are not supported, it's something I will be looking into for a future update though.<br>
 
-Examples can be found [here](Examples/Custom-Doors-Examples).
+Examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/Custom%20Doors%20Examples).
 <br>
 
 #### Transparent Tiles
