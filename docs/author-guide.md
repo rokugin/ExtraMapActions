@@ -64,7 +64,12 @@ Make sure to remove all the `<>` angle brackets when filling in your map propert
 <br>
 
 #### Fireplace Conditions Data Asset
-A dictionary of string → models containing a Condition field that accepts a [Game State Query](https://stardewvalleywiki.com/Modding:Game_state_queries).<br>
+A dictionary of string → models.<br>
+
+| Field | Description |
+| :--- | :--- |
+| Condition | A [game state query](https://stardewvalleywiki.com/Modding:Game_state_queries) which determines if the fireplace should be turned on. Default true. |
+| UsePlayerState | *(Optional)* A bool, only used if the fireplace tile also has an `Action EMA_Fireplace` property. Determines if the players choice to turn the fireplace on or off should supercede the Condition. Default false. |
 
 Existing entries can be edited or new entries can be added using CP's [EditData](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editdata.md):<br>
 ```jsonc
