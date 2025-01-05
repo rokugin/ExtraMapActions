@@ -114,7 +114,7 @@ public class TileActions {
         string oppositeState = fireplaceOn ? "off" : "on";
         location.setFireplace(on: !fireplaceOn, point.X, point.Y);
         location.modData[$"EMA_Fireplace_{point.X}_{point.Y}"] = oppositeState;
-        Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, !fireplaceOn), "FireplaceState");
+        Helper.Multiplayer.SendMessage(new FireplaceState(location.Name, point, !fireplaceOn), "FireplaceState", [ModEntry.ModId]);
         location.modData["rokugin.EMA"] = "Fireplace";
 
         return true;
