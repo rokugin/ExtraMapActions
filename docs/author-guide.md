@@ -35,6 +35,7 @@ If zero, the prompt will change to reflect that it's free, otherwise if the play
 ## Usage<span id="usage"></span>
 ### Tile Actions<span id="tileactions"></span>
 Tile actions are added directly in [Tiled](https://stardewvalleywiki.com/Modding:Maps#Tile_properties) or as part of a block in [CP](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editmap.md).<br>
+Fireplace examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/%5BCP%5D%20Fireplace%20Examples).<br>
 <br>
 
 #### EMA_OfflineFarmhandInventory
@@ -87,7 +88,7 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
 
 ### Tile Properties<span id="tileprops"></span>
 ### Doors
-Examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/Custom%20Doors%20Examples).<br>
+Door examples can be found [here](https://github.com/rokugin/ExtraMapActions/tree/main/docs/Examples/Custom%20Doors%20Examples).<br>
 
 In order to place custom doors on a custom map, you need to:
   * Place at least the bottom transparent tile of the door on the `Buildings` tile layer
