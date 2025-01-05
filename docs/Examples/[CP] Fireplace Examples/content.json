@@ -1,0 +1,40 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Format": "2.4.0",
+  "Changes": [
+    {
+      "LogName": "Load custom location map",
+      "Action": "Load",
+      "Target": "Maps/{{ModId}}_FireplaceShed",
+      "FromFile": "assets/FireplaceShed.tmx"
+    },
+    {
+      "LogName": "Add custom location",
+      "Action": "EditData",
+      "Target": "Data/Locations",
+      "Entries": {
+        "{{ModId}}_FireplaceShed": {
+          "DisplayName": "Fireplace Shed",
+          "DefaultArrivalTile": {"X": 1, "Y": 6},
+          "CreateOnLoad": {
+            "MapPath": "Maps/{{ModId}}_FireplaceShed"
+          }
+        }
+      }
+    },
+    {
+      "LogName": "Add example condition",
+      "Action": "EditData",
+      "Target": "rokugin.EMA/FireplaceConditions",
+      "Entries": {
+        "rokuginExample": {
+          "Condition": "TIME 1800"
+        },
+        "AlwaysOn": {
+          "Condition": "true",
+          "UsePlayerState": true
+        }
+      }
+    }
+  ]
+}
