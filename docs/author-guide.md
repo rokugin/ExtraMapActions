@@ -81,7 +81,8 @@ Existing entries can be edited or new entries can be added using CP's [EditData]
       "Condition": "ANY \"SEASON fall winter\" \"WEATHER Here Rain Snow Storm GreenRain\""
     },
     "AlwaysOn": {// overwrites existing AlwaysOn entry
-      "Condition": "false"
+      "Condition": "false",
+      "UsePlayerState": true
     },
   }
 }
