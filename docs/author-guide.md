@@ -61,7 +61,8 @@ A dictionary of string → models.<br>
 | Prefix | *(Optional)* A string, if omitted won't be used. Adds text to the beginning of every message. |
 | Suffix | *(Optional)* A string, if omitted won't be used. Adds text to the end of every message. |
 | Messages | A list of strings. |
-Can use `#` to create breaks, requiring the player to click to advance to the next page.
+
+Can use `#` to create breaks, requiring the player to click to advance to the next page.<br><br>
 
 Existing entries can be edited or new entries can be added using CP's [EditData](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editdata.md):<br>
 ```jsonc
