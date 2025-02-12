@@ -14,9 +14,10 @@ Extra Map Actions adds new tile actions, properties, and map properties.<br>
 | EMA_CraneGame | Opens the crane game dialogue |
 | EMA_LostAndFound | Opens [lost and found](https://stardewvalleywiki.com/Mayor%27s_Manor#Lost_and_Found) |
 | EMA_OfflineFarmhandInventory | Opens dialogue window to choose an offline farmhand inventory to open |
-| EMA_Fireplace \[right] | Can be used to create an operable fireplace |
+| EMA_Fireplace \[right] | Creates an operable fireplace |
 | EMA_DivorceBook | Opens [divorce book](https://stardewvalleywiki.com/Mayor%27s_Manor#Divorce) |
 | EMA_LedgerBook | Opens [ledger book](https://stardewvalleywiki.com/Multiplayer#Money) |
+| EMA_Message <messagesKey> \[boolRandom] | Opens an endlessly cycling dialogue message |
 <br>
 
 | Map Property | Description |
@@ -44,6 +45,44 @@ Normally an option on the Lost and Found box in the Mayor's Manor, if in a multi
 
 #### EMA_Fireplace
 Interacting with this tile starts or stops a fireplace, based on the location of this tile. Intended to be placed inside a normal 2 tile wide fireplace. `EMA_Fireplace` should be on the left tile and `EMA_Fireplace right` should be on the right tile.<br>
+<br>
+
+#### EMA_Message
+Interacting with this tile opens a dialogue message, chosen from the specified `<messagesKey>` entry in the `rokugin.EMA/Messages` data asset.<br>
+If `[boolRandom]` is true then a random message is chosen, otherwise if false or omitted each message is chosen in order.<br>
+Each interaction will show one message and each message will be shown once before cycling through again.<br>
+<br>
+
+### Messages Data Asset
+A dictionary of string → models.<br>
+
+| Field | Description |
+| :--- | :--- |
+| Prefix | *(Optional)* A string, if omitted won't be used. Adds text to the beginning of every message. |
+| Suffix | *(Optional)* A string, if omitted won't be used. Adds text to the end of every message. |
+| Messages | A list of strings. |
+Can use `#` to create breaks, requiring the player to click to advance to the next page.
+
+Existing entries can be edited or new entries can be added using CP's [EditData](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/action-editdata.md):<br>
+```jsonc
+{
+  "Action": "EditData",
+  "Target": "rokugin.EMA/Messages",
+  "Entries": {
+    "{{ModId}}_Bookshelf": {
+      "Prefix": "{{i18n:bookshelf.prefix}}",
+      "Messages": [
+        "{{i18n:bookshelf.0}}",
+        "{{i18n:bookshelf.1}}",
+        "{{i18n:bookshelf.2}}",
+        "{{i18n:bookshelf.3}}",
+        "Accepts plain text."
+      ],
+      "Suffix": "#Also accepts plain text."
+    }
+  }
+}
+```
 <br>
 
 
