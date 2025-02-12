@@ -17,7 +17,7 @@ Extra Map Actions adds new tile actions, properties, and map properties.<br>
 | EMA_Fireplace \[right] | Creates an operable fireplace |
 | EMA_DivorceBook | Opens [divorce book](https://stardewvalleywiki.com/Mayor%27s_Manor#Divorce) |
 | EMA_LedgerBook | Opens [ledger book](https://stardewvalleywiki.com/Multiplayer#Money) |
-| EMA_Message <messagesKey> \[boolRandom] | Opens an endlessly cycling dialogue message |
+| EMA_Message `<messagesKey> [boolRandom]` | Opens an endlessly cycling dialogue message |
 <br>
 
 | Map Property | Description |
