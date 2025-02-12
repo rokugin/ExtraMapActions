@@ -50,8 +50,24 @@ Interacting with this tile starts or stops a fireplace, based on the location of
 #### EMA_Message
 Interacting with this tile opens a dialogue message, chosen from the specified `<messagesKey>` entry in the `rokugin.EMA/Messages` data asset.<br>
 If `[boolRandom]` is true then a random message is chosen, otherwise if false or omitted each message is chosen in order.<br>
-Each interaction will show one message and each message will be shown once before cycling through again.<br>
+Each interaction will show one message and each message will be shown once before cycling through again.<br><br>
+
+Example using CP to add the Action to a bookshelf in the Museum:
+```jsonc
+{
+  "Action": "EditMap",
+  "Target": "Maps/ArchaeologyHouse",
+  "MapTiles": [
+    {
+      "Layer": "Buildings",
+      "Position": { "X": 13, "Y": 7 },
+      "SetProperties": { "Action": "EMA_Message {{ModId}}_Bookshelf true" }
+    }
+  ]
+}
+```
 <br>
+
 
 ### Messages Data Asset
 A dictionary of string → models.<br>
