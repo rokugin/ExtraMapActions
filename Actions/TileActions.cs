@@ -2,11 +2,7 @@
 using StardewValley.SpecialOrders;
 using StardewValley;
 using Microsoft.Xna.Framework;
-using StardewValley.GameData;
-using StardewValley.Locations;
-using StardewValley.Minigames;
 using ExtraMapActions.Framework;
-using System.Reflection;
 
 namespace ExtraMapActions.Actions;
 
@@ -14,10 +10,10 @@ public class TileActions {
 
     IMonitor Monitor = null!;
     IModHelper Helper = null!;
-    ModConfig Config = new();
+    static ModConfig Config = new();
     LogLevel logLevel;
 
-    Dictionary<string, Farmer> sendMoneyMapping = new();
+    
 
     public void Init(IMonitor monitor, IModHelper helper, ModConfig config, LogLevel level) {
         Monitor = monitor;
@@ -36,6 +32,26 @@ public class TileActions {
         GameLocation.RegisterTileAction("EMA_DivorceBook", HandleDivorce);
         GameLocation.RegisterTileAction("EMA_LedgerBook", HandleLedger);
         //GameLocation.RegisterTileAction("EMA_Campfire", HandleCampfire);
+        GameLocation.RegisterTileAction("EMA_Message", HandleMessage);
+    }
+
+    private bool HandleMessage(GameLocation location, string[] args, Farmer farmer, Point point) {
+        string entry = ArgUtility.Get(args, 1);
+        bool random = ArgUtility.GetBool(args, 2);
+        
+        if (!AssetManager.MessagesData.ContainsKey(entry)) {
+            Monitor.Log($"\nNo entry matching '{entry}' found in 'rokugin.EMA/Messages' data asset.", LogLevel.Error);
+            return false;
+        }
+
+        string message = ActionHandler.GetMessage(entry, random);
+
+        if (!string.IsNullOrWhiteSpace(message)) {
+            Game1.drawDialogueNoTyping(message);
+            return true;
+        }
+
+        return false;
     }
 
     bool HandleCraneGame(GameLocation location, string[] args, Farmer farmer, Point point) {
@@ -46,7 +62,7 @@ public class TileActions {
             ? $"{Config.CraneGameCost} {Helper.Translation.Get("start-play-cost.text")}"
             : $"{Helper.Translation.Get("start-play-free.text")}",
         location.createYesNoResponses(),
-        TryToStartCraneGame);
+        ActionHandler.TryToStartCraneGame);
 
         return true;
     }
@@ -59,7 +75,7 @@ public class TileActions {
             location.createQuestionDialogue(
                 Helper.Translation.Get("lost-and-found-question"),
                 Game1.currentLocation.createYesNoResponses(),
-                OpenLostAndFound);
+                ActionHandler.OpenLostAndFound);
         } else {
             Monitor.Log("Lost and found cannot be opened, attempting to open info dialogue.", logLevel);
             string prompt =
@@ -76,7 +92,7 @@ public class TileActions {
         Monitor.Log("Offline farmhand inventory action found, checking for offline farmhand inventories.", logLevel);
         List<Response> choices = new List<Response>();
 
-        foreach (Farmer retrievableFarmer in GetRetrievableFarmers()) {
+        foreach (Farmer retrievableFarmer in ActionHandler.GetRetrievableFarmers()) {
             string key = retrievableFarmer.UniqueMultiplayerID.ToString() ?? "";
             string name = retrievableFarmer.Name;
 
@@ -94,7 +110,7 @@ public class TileActions {
         location.createQuestionDialogue(
             Game1.content.LoadString("Strings\\Locations:ManorHouse_LAF_FarmhandItemsQuestion"),
             choices.ToArray(),
-            OpenFarmhandInventory
+            ActionHandler.OpenFarmhandInventory
         );
 
         return true;
@@ -129,7 +145,7 @@ public class TileActions {
             if (s == null) {
                 s = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Locations:ManorHouse_DivorceBook_CancelQuestion");
             }
-            location.createQuestionDialogue(s, location.createYesNoResponses(), DivorceChoice);
+            location.createQuestionDialogue(s, location.createYesNoResponses(), ActionHandler.DivorceChoice);
         } else if (farmer.isMarriedOrRoommates()) {
             string s = null!;
             if (farmer.hasCurrentOrPendingRoommate()) {
@@ -138,7 +154,7 @@ public class TileActions {
             if (s == null) {
                 s = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Locations:ManorHouse_DivorceBook_Question");
             }
-            location.createQuestionDialogue(s, location.createYesNoResponses(), DivorceChoice);
+            location.createQuestionDialogue(s, location.createYesNoResponses(), ActionHandler.DivorceChoice);
         } else {
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_DivorceBook_NoSpouse"));
         }
@@ -158,19 +174,19 @@ public class TileActions {
                 }
                 choices.Add(new Response("Leave", Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_Leave")));
                 location.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SeparateWallets_HostQuestion"),
-                    choices.ToArray(), LedgerOptions);
+                    choices.ToArray(), ActionHandler.LedgerOptions);
             } else {
-                ChooseRecipient();
+                ActionHandler.ChooseRecipient();
             }
         } else if (!Game1.getAllFarmhands().Any()) {
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_Singleplayer"));
         } else if (Game1.IsMasterGame) {
             if (Game1.player.changeWalletTypeTonight.Value) {
                 string s = Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SharedWallets_CancelQuestion");
-                location.createQuestionDialogue(s, location.createYesNoResponses(), LedgerOptions);
+                location.createQuestionDialogue(s, location.createYesNoResponses(), ActionHandler.LedgerOptions);
             } else {
                 string s = Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SharedWallets_SeparateQuestion");
-                location.createQuestionDialogue(s, location.createYesNoResponses(), LedgerOptions);
+                location.createQuestionDialogue(s, location.createYesNoResponses(), ActionHandler.LedgerOptions);
             }
         } else {
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SharedWallets_Client"));
@@ -183,155 +199,6 @@ public class TileActions {
 
 
         return true;
-    }
-
-    void LedgerOptions(Farmer who, string whichAnswer) {
-        if (whichAnswer.ToLower() == "leave") return;
-        if (whichAnswer.ToLower() == "no") return;
-
-        if (whichAnswer.ToLower() == "sendmoney") {
-            DelayedAction delayed = new DelayedAction(50);
-            delayed.behavior = () => {
-                ChooseRecipient();
-            };
-            Game1.delayedActions.Add(delayed);
-        } else if (whichAnswer.ToLower() == "cancelmerge") {
-            who.changeWalletTypeTonight.Value = false;
-            Game1.Multiplayer.globalChatInfoMessage("MergeWalletsCancel", who.Name);
-        } else if (whichAnswer.ToLower() == "mergewallets") {
-            who.changeWalletTypeTonight.Value = true;
-            Game1.Multiplayer.globalChatInfoMessage("MergeWallets", who.Name);
-        } else if (whichAnswer.ToLower() == "yes") {
-            if (who.changeWalletTypeTonight.Value) {
-                who.changeWalletTypeTonight.Value = false;
-                Game1.Multiplayer.globalChatInfoMessage("SeparateWalletsCancel", who.Name);
-            } else {
-                who.changeWalletTypeTonight.Value = true;
-                Game1.Multiplayer.globalChatInfoMessage("SeparateWallets", who.Name);
-            }
-        }
-    }
-
-    void ChooseRecipient() {
-        sendMoneyMapping.Clear();
-        List<Response> otherFarmers = new List<Response>();
-        foreach (Farmer farmer in Game1.getAllFarmers()) {
-            if (farmer.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID && !farmer.isUnclaimedFarmhand) {
-                string key = "Transfer" + (otherFarmers.Count + 1);
-                string farmerName = farmer.Name;
-                if (farmer.Name == "") {
-                    farmerName = Game1.content.LoadString("Strings\\UI:Chat_PlayerJoinedNewName");
-                }
-                otherFarmers.Add(new Response(key, farmerName));
-                sendMoneyMapping.Add(key, farmer);
-            }
-        }
-        if (otherFarmers.Count == 0) {
-            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_NoFarmhands"));
-            return;
-        }
-        otherFarmers.Sort((Response x, Response y) => string.Compare(x.responseKey, y.responseKey));
-        otherFarmers.Add(new Response("Cancel", Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_TransferCancel")));
-        Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:ManorHouse_LedgerBook_SeparateWallets_TransferQuestion"),
-            otherFarmers.ToArray(), PreBeginSendMoney);
-    }
-
-    void PreBeginSendMoney(Farmer who, string whichAnswer) {
-        if (whichAnswer.ToLower() == "cancel") return;
-
-        Type type = Game1.getLocationFromName("ManorHouse").GetType();
-        MethodInfo beginSendMoney = type.GetMethod("beginSendMoney", BindingFlags.NonPublic | BindingFlags.Instance)!;
-        beginSendMoney.Invoke(Game1.getLocationFromName("ManorHouse"), [sendMoneyMapping[whichAnswer]]);
-        sendMoneyMapping.Clear();
-    }
-
-    void DivorceChoice(Farmer who, string whichAnswer) {
-        if (whichAnswer.ToLower() != "yes") return;
-
-        string s = null!;
-        if (who.divorceTonight.Value) {
-            who.divorceTonight.Value = false;
-            if (!who.hasRoommate()) {
-                who.addUnearnedMoney(50000);
-            }
-            if (who.hasCurrentOrPendingRoommate()) {
-                s = Game1.content.LoadString("Strings\\Locations:ManorHouse_DivorceBook_Cancelled_Krobus", who.getSpouse().displayName);
-            }
-            if (s == null) {
-                s = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Locations:ManorHouse_DivorceBook_Cancelled");
-            }
-            Game1.drawObjectDialogue(s);
-            if (!who.hasRoommate()) {
-                Game1.Multiplayer.globalChatInfoMessage("DivorceCancel", who.Name);
-            }
-        } else {
-            if (who.Money >= 50000 || who.hasCurrentOrPendingRoommate()) {
-                if (!who.hasRoommate()) {
-                    who.Money -= 50000;
-                }
-                who.divorceTonight.Value = true;
-                if (who.hasCurrentOrPendingRoommate()) {
-                    s = Game1.content.LoadString("Strings\\Locations:ManorHouse_DivorceBook_Filed_Krobus", who.getSpouse().displayName);
-                }
-                if (s == null) {
-                    s = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Locations:ManorHouse_DivorceBook_Filed");
-                }
-                Game1.drawObjectDialogue(s);
-                if (!who.hasRoommate()) {
-                    Game1.Multiplayer.globalChatInfoMessage("Divorce", who.Name);
-                }
-            } else {
-                Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney1"));
-            }
-        }
-    }
-
-    void TryToStartCraneGame(Farmer who, string whichAnswer) {
-        if (!(whichAnswer.ToLower() == "yes")) return;
-
-        if (who.Money >= Config.CraneGameCost) {
-            who.Money -= Config.CraneGameCost;
-            Game1.changeMusicTrack("none", track_interruptable: false, MusicContext.MiniGame);
-
-            Game1.globalFadeToBlack(delegate {
-                Game1.currentMinigame = new CraneGame();
-            }, 0.008f);
-        } else {
-            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:PurchaseAnimalsMenu.cs.11325"));
-        }
-    }
-
-    void OpenLostAndFound(Farmer who, string answer) {
-        if (answer.ToLower() == "yes") who.team.CheckReturnedDonations();
-    }
-
-    void OpenFarmhandInventory(Farmer who, string answer) {
-        if (answer.ToLower() == "cancel") return;
-
-        if (long.TryParse(answer.Split('_')[0], out var id)) {
-            Farmer? farmhand = Game1.GetPlayer(id);
-            if (farmhand != null && !farmhand.isActive() && Utility.getHomeOfFarmer(farmhand) is Cabin home) {
-                home.inventoryMutex.RequestLock(home.openFarmhandInventory);
-            }
-        }
-    }
-
-    List<Farmer> GetRetrievableFarmers() {
-        List<Farmer> offline_farmers = new List<Farmer>(Game1.getAllFarmers());
-
-        foreach (Farmer online_farmer in Game1.getOnlineFarmers()) {
-            offline_farmers.Remove(online_farmer);
-        }
-
-        for (int i = 0; i < offline_farmers.Count; i++) {
-            Farmer farmer = offline_farmers[i];
-            if (Utility.getHomeOfFarmer(farmer) is Cabin home && (farmer.isUnclaimedFarmhand || home.inventoryMutex.IsLocked())) {
-                offline_farmers.RemoveAt(i);
-                i--;
-            }
-        }
-
-        return offline_farmers;
     }
 
 }

@@ -11,7 +11,7 @@ namespace ExtraMapActions;
 
 internal class ModEntry : Mod {
 
-    ModConfig Config = new();
+    public static ModConfig Config = new();
     public static IMonitor SMonitor = null!;
     TileActions TileActions = new();
     LogLevel logLevel => Config.DebugLogging ? LogLevel.Debug : LogLevel.Trace;

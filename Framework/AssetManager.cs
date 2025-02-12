@@ -28,12 +28,26 @@ internal static class AssetManager {
         }
     }
 
+    static Dictionary<string, MessagesModel> PrivateMessagesData = null!;
+    public static Dictionary<string, MessagesModel> MessagesData {
+        get
+        {
+            if (PrivateMessagesData == null) {
+                PrivateMessagesData = Game1.content.Load<Dictionary<string, MessagesModel>>("rokugin.EMA/Messages");
+            }
+            return PrivateMessagesData;
+        }
+    }
+
     internal static void OnAssetRequested(AssetRequestedEventArgs e) {
         if (e.NameWithoutLocale.IsEquivalentTo("rokugin.EMA/FireplaceConditions")) {
             e.LoadFromModFile<Dictionary<string, FireplaceConditionsModel>>("assets/DefaultFireplaceConditions.json", AssetLoadPriority.Exclusive);
         }
         if (e.NameWithoutLocale.IsEquivalentTo("rokugin.EMA/CustomDoors")) {
             e.LoadFrom(() => new Dictionary<string, CustomDoorsModel>(), AssetLoadPriority.Exclusive);
+        }
+        if (e.NameWithoutLocale.IsEquivalentTo("rokugin.EMA/Messages")) {
+            e.LoadFrom(() => new Dictionary<string, MessagesModel>(), AssetLoadPriority.Exclusive);
         }
     }
 
@@ -44,6 +58,9 @@ internal static class AssetManager {
             }
             if (name.IsEquivalentTo("rokugin.EMA/FireplaceConditions")) {
                 PrivateFireplaceConditionsData = null!;
+            }
+            if (name.IsEquivalentTo("rokugin.EMA/Messages")) {
+                PrivateMessagesData = null!;
             }
         }
     }
