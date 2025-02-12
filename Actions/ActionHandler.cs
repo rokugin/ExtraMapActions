@@ -180,9 +180,19 @@ public static class ActionHandler {
             return GetMessage(entry, random);
         }
 
+        string? prefix = AssetManager.MessagesData[entry].Prefix;
+        string? suffix = AssetManager.MessagesData[entry].Suffix;
         string selected = random ? Game1.random.ChooseFrom(messages) : messages[0];
+        string s = "";
+
+        if (!string.IsNullOrWhiteSpace(prefix)) s += prefix;
+        
+        s += selected;
+
+        if (!string.IsNullOrWhiteSpace(suffix)) s += suffix;
+
         seenMessages.Add(selected);
-        return selected;
+        return s;
     }
 
 }
